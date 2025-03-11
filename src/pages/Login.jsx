@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,8 +18,15 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Here you would typically validate credentials with your backend
     console.log('Login attempt with:', formData);
+    setLoggedIn(true);
   };
+
+  // If logged in, redirect to dashboard
+  if (loggedIn) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -106,9 +115,9 @@ const Login = () => {
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 text-gray-500">
                   Don't have an account?{' '}
-                  <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+                  <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
                     Sign up
-                  </a>
+                  </Link>
                 </span>
               </div>
             </div>
