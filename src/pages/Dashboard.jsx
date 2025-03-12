@@ -4,7 +4,6 @@ const Dashboard = () => {
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState({
     collegeName: '',
-    rating: 5,
     review: '',
     anonymous: false
   });
@@ -33,10 +32,15 @@ const Dashboard = () => {
     setReviews(prev => [reviewToAdd, ...prev]);
     setNewReview({
       collegeName: '',
-      rating: 5,
       review: '',
       anonymous: false
     });
+  };
+
+  const handleDelete = (reviewId) => {
+    if (window.confirm('Are you sure you want to delete this review?')) {
+      setReviews(prev => prev.filter(review => review.id !== reviewId));
+    }
   };
 
   return (
@@ -68,25 +72,6 @@ const Dashboard = () => {
                       placeholder="Enter college name"
                       required
                     />
-                  </div>
-
-                  <div>
-                    <label htmlFor="rating" className="block text-sm font-medium text-gray-700">
-                      Rating
-                    </label>
-                    <select
-                      id="rating"
-                      name="rating"
-                      value={newReview.rating}
-                      onChange={handleChange}
-                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                    >
-                      {[1, 2, 3, 4, 5].map((num) => (
-                        <option key={num} value={num}>
-                          {num} Star{num !== 1 ? 's' : ''}
-                        </option>
-                      ))}
-                    </select>
                   </div>
 
                   <div>
@@ -143,14 +128,19 @@ const Dashboard = () => {
                       <div className="px-4 py-5 sm:p-6">
                         <div className="flex items-center justify-between">
                           <h3 className="text-lg font-medium text-gray-900">{review.collegeName}</h3>
-                          <div className="flex items-center">
-                            <span className="text-yellow-400">
-                              {'★'.repeat(review.rating)}
-                              {'☆'.repeat(5 - review.rating)}
-                            </span>
-                            <span className="ml-2 text-sm text-gray-500">
+                          <div className="flex items-center space-x-4">
+                            <span className="text-sm text-gray-500">
                               {new Date(review.date).toLocaleDateString()}
                             </span>
+                            <button
+                              onClick={() => handleDelete(review.id)}
+                              className="text-red-600 hover:text-red-800 transition-colors duration-200"
+                              title="Delete review"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clipRule="evenodd" />
+                              </svg>
+                            </button>
                           </div>
                         </div>
                         <p className="mt-2 text-sm text-gray-500">{review.review}</p>
