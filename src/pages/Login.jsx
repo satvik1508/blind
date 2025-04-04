@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -16,11 +17,20 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Here you would typically validate credentials with your backend
+    try {
+      const response = await axios.post('http://localhost:5000/api/v1/login',{
+        email:formData.email,
+        password:formData.password
+      });
+      localStorage.setItem('token', response.data.token);
+      setLoggedIn(true);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
     console.log('Login attempt with:', formData);
-    setLoggedIn(true);
+    
   };
 
   // If logged in, redirect to dashboard

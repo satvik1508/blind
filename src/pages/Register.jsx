@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +23,18 @@ const Register = () => {
       alert('Passwords do not match!');
       return;
     }
-    console.log('Registration attempt with:', formData);
+
+    try {
+      const response = axios.post('http://localhost:5000/api/v1/register', {
+        username:formData.userName,
+        email:formData.email,
+        password:formData.password
+      });
+      console.log('Registration successful:', response.data);
+    } catch (error) {
+      console.error('Registration failed:', error.response.data);
+    }
+
   };
 
   return (
